@@ -1,0 +1,5 @@
+S .
+B _build
+
+PKG xmlm
+PKG ppx_sexp

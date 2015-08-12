@@ -1,0 +1,4 @@
+version = "0.1"
+
+archive(byte) = "sxmlm.cma"
+archive(native) = "sxmlm.cmxa"
