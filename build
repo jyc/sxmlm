@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+ocamlbuild -use-ocamlfind -pkg xmlm -pkg ppx_sexp \
+    sxmlm.cma
+
+ocamlbuild -use-ocamlfind -pkg xmlm -pkg ppx_sexp \
+    sxmlm.cmxa

@@ -1,0 +1,19 @@
+opam-version: "1.2"
+name: "sxmlm"
+version: "0.2.0"
+maintainer: "Jonathan Chan <jyc@fastmail.fm>"
+authors: "Jonathan Chan <jyc@fastmail.fm>"
+homepage: "https://bitbucket.org/jyc/sxmlm"
+bug-reports: "https://bitbucket.org/jyc/sxmlm/issues"
+license: "BSD 2-Clause"
+dev-repo: "https://bitbucket.org/jyc/sxmlm/src"
+build: [
+  ["./build"]
+]
+install: ["./install"]
+remove: ["./uninstall"]
+depends: [
+  "ocamlfind" {build}
+  "xmlm"
+  "ppx_sexp"
+]
