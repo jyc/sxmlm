@@ -5,13 +5,12 @@ type frag = frag Xmlm.frag
     [Xmlm.output_doc_tree id out (dtd, x)], where [id] is the identity
     function, [out] is an Xmlm output, and [dtd] is an Xmlm DTD.
 
-    An optional argument [sigil] is accepted, defaulting to "~+" (what +
-    expands to in the AST when used in expressions of the form [+ a b ...]).
+    An optional argument [sigil] is accepted, defaulting to "@".
     This is the identifier for alists of tag attributes. For example, with the
     default attribute sigil, inside of an sexp application:
 
     ({
-      (html (+ (lang "en"))
+      (html ((@) (lang "en"))
          (head
             (title "My webpage"))
          (body
@@ -19,5 +18,9 @@ type frag = frag Xmlm.frag
     })
 
     SXML uses @, which we can't use due to it not being valid OCaml syntax.
+    Note that you must be very careful about how OCaml's operator precedence/
+    -fixness works. See http://caml.inria.fr/pub/docs/manual-ocaml/lex.html
+    Using some operators will affect the AST (and thus the parsed S-expression)
+    in strange ways. For example, using (@ (lang "en")) is a syntax error.
 *)
 val xmlm_of_sexp : ?sigil:string -> PpxSexp.sexp -> frag

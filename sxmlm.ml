@@ -1,15 +1,8 @@
 type frag = frag Xmlm.frag
 
-let parse_namespaced s =
-  try
-    let n = String.index s '\'' in
-    (String.sub s 0 n, String.sub s (n + 1) (String.length s - n - 1))
-  with
-  | Not_found -> ("", s)
-
 let string_of_char = String.make 1
 
-let string_of_atom x =
+let rec string_of_atom x =
   match x with
   | `Char x -> string_of_char x
   | `Float x -> x
@@ -21,7 +14,12 @@ let string_of_atom x =
   | `String x -> x
   | `Bool true -> "true"
   | `Bool false -> "false"
-  | `List x -> invalid_arg "Expected atom, received list."
+  | `List _ -> invalid_arg ("Expected atom, received list: " ^ (string_of_sexp x))
+and string_of_sexp x =
+  match x with
+  | `String x -> "\"" ^ x ^ "\""
+  | `List xs -> "(" ^ (String.concat " " (List.map string_of_sexp xs)) ^ ")"
+  | _ -> string_of_atom x
 
 let rec parse_attrs attrs =
   match attrs with
@@ -30,9 +28,9 @@ let rec parse_attrs attrs =
   | `List [k; v] :: rest ->
     (("", string_of_atom k), string_of_atom v) :: parse_attrs rest
   | [] -> []
-  | _ -> invalid_arg "Provided SXML attributes are in an invalid format."
+  | _ -> invalid_arg ("Provided SXML attributes are in an invalid format: " ^ (string_of_sexp (`List attrs)))
 
-let rec xmlm_of_sexp ?(sigil="~+") x =
+let rec xmlm_of_sexp ?(sigil="@") x =
   let xmlm_of_el ?(ns'=`String "") tag' children' =
     let attrs, children = match children' with
       | `List (`Symbol sigil' :: attrs) :: children when sigil' = sigil ->
